@@ -40,32 +40,45 @@
             "type": "PlatformImage",
             "publisher": "MicrosoftWindowsDesktop",
             "offer": "Windows-10",
-            "sku": "20h1-evd",
+            "sku": "21h1-evd",
             "version": "latest"
           },
           "customize": [
             {
+              "type": "WindowsUpdate",
+              "searchCriteria": "IsInstalled=0",
+              "filters": [
+                  "exclude:$_.Title -like '*Preview*'",
+                  "include:$true"
+                          ],
+              "updateLimit": 40
+            },
+            {
+              "type": "WindowsRestart",
+              "restartCheckCommand": "write-host 'restarting post Teams Install'",
+              "restartTimeout": "5m"
+            },
+            {
               "type": "PowerShell",
-              "name": "GetAzCopy",
-              "inline": [
-                "New-Item -Type Directory -Path 'c:\\' -Name temp",
-                "invoke-webrequest -uri 'https://aka.ms/downloadazcopy-v10-windows' -OutFile 'c:\\temp\\azcopy.zip'",
-                "Expand-Archive 'c:\\temp\\azcopy.zip' 'c:\\temp'",
-                "copy-item 'C:\\temp\\azcopy_windows_amd64_*\\azcopy.exe\\' -Destination 'c:\\temp'"
-              ]
+              "name":   "InstallAzCopy",  
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/InstallAzCopy.ps1",
+              "runElevated": "true",
             }
           ],
           "distribute": [
-            {
-              "type": "ManagedImage",
-              "imageId": "/subscriptions/<subscriptionID>/resourceGroups/<rgName>/providers/Microsoft.Compute/images/<imageName>",
-              "location": "<region>",
-              "runOutputName": "<runOutputName>",
+            {   
+              "type": "SharedImage",
+              "galleryImageId": "/subscriptions/<subscriptionID>/resourceGroups/<rgName>/providers/Microsoft.Compute/galleries/<sharedImageGalName>/images/<imageDefName>",
+              "runOutputName": "win10Client",
               "artifactTags": {
-                "source": "azVmImageBuilder",
-                "baseosimg": "windows10Multi"
-              }
-            }
+                  "source": "wvd10",
+                  "baseosimg": "windows10Multi"
+              },
+              "replicationRegions": [
+                "westeurope"
+
+              ]
+          }
           ]
         }
       }

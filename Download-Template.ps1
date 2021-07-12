@@ -6,7 +6,8 @@
 # The template used is from the Azure Quick Start templates
 # it creates a Windows image and outputs the finished image to a Managed IMage
 # Set the template file path and the template file name
-$Win10Url = "https://raw.githubusercontent.com/tsrob50/AIB/main/Win10MultiTemplate.json"
+#$Win10Url = "https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/solutions/14_Building_Images_WVD/armTemplateWVD.json"
+$Win10Url = "https://raw.githubusercontent.com/sjeanjean/AIB/main/Win10MultiTemplate.json"
 $Win10FileName = "Win10MultiTemplate.json"
 #Test to see if the path exists.  Create it if not
 if ((test-path .\Template) -eq $false) {
@@ -26,7 +27,7 @@ else {
 # Setup the variables
 # The first four need to match Enable-identity.ps1 script
 # destination image resource group
-$imageResourceGroup = 'AIBManagedIDRG'
+$imageResourceGroup = 'ImageBuilder'
 # location (see possible locations in main docs)
 $location = (Get-AzResourceGroup -Name $imageResourceGroup).Location
 # your subscription, this will get your current subscription
@@ -43,14 +44,20 @@ $templateFilePath = ".\Template\$Win10FileName"
 $identityName = (Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup).Name
 # get the user assigned managed identity id
 $identityNameResourceId = (Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id
+# get the Shared Image Galery Name
+$sigGalleryName= "MasterImages"
+# get the Image Definition Name
+$imageDefName ="VDA"
 
 # Update the Template 
 ((Get-Content -path $templateFilePath -Raw) -replace '<subscriptionID>',$subscriptionID) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<rgName>',$imageResourceGroup) | Set-Content -Path $templateFilePath
-((Get-Content -path $templateFilePath -Raw) -replace '<region>',$location) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<region1>',$location) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<runOutputName>',$runOutputName) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<imageName>',$imageName) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<imgBuilderId>',$identityNameResourceId) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<sharedImageGalName>',$sigGalleryName) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<imageDefName>',$imageDefName) | Set-Content -Path $templateFilePath
 
 # The following commands require the Az.ImageBuilder module
 # Install the PowerShell module if not already installed
@@ -58,7 +65,7 @@ Install-Module -name 'Az.ImageBuilder' -AllowPrerelease
 
 # Run the deployment
 New-AzResourceGroupDeployment -ResourceGroupName $imageResourceGroup -TemplateFile $templateFilePath `
--api-version "2019-05-01-preview" -imageTemplateName $imageTemplateName -svclocation $location
+-api-version "2020-02-14" -imageTemplateName $imageTemplateName -svclocation $location
 
 # Verify the template
 Get-AzImageBuilderTemplate -ImageTemplateName $imageTemplateName -ResourceGroupName $imageResourceGroup |
