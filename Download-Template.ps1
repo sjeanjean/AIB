@@ -47,7 +47,7 @@ $identityNameResourceId = (Get-AzUserAssignedIdentity -ResourceGroupName $imageR
 # get the Shared Image Galery Name
 $sigGalleryName= "MasterImages"
 # get the Image Definition Name
-$imageDefName ="VDA"
+$imageDefName ="VDA-image"
 
 # Update the Template 
 ((Get-Content -path $templateFilePath -Raw) -replace '<subscriptionID>',$subscriptionID) | Set-Content -Path $templateFilePath
