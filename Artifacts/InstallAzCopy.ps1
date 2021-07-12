@@ -17,7 +17,7 @@ Function Install-AzCopy {
     $null = New-Item -Type Directory -Path $InstallPath -Force
 
     # Download AzCopy zip for Windows
-    Invoke-WebRequest -Source "https://aka.ms/downloadazcopy-v10-windows" -Destination $zip
+    Invoke-WebRequest -Uri "https://aka.ms/downloadazcopy-v10-windows" -OutFile $zip
 
     # Expand the Zip file
     Expand-Archive $zip $InstallPath -Force
