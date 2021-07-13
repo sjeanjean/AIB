@@ -71,13 +71,30 @@
               "type": "PowerShell", 
               "runElevated": true,
               "name": "CopyRessources", 
-              "inline": "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/VDAServerSetup_1912.exe c:\\temp"
+              "inline": [
+                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources c:\\temp"
+              ]
             }, 
             { 
               "type": "PowerShell", 
               "runElevated": true,
               "name": "InstallVDA", 
-              "inline": "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /virtualmachine /optimize /components vda,plugins"
+              "inline": [
+                "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /noresume /virtualmachine /optimize /masterimage /components vda,plugins"
+              ]
+            }, 
+            {
+              "type": "WindowsRestart",
+              "restartCheckCommand": "Write-Host 'restarting for VDA Installation'",
+              "restartTimeout": "5m"
+             },
+            { 
+              "type": "PowerShell", 
+              "runElevated": true,
+              "name": "InstallVDA-2", 
+              "inline": [
+                "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /noresume /virtualmachine /optimize /masterimage /components vda,plugins"
+              ]
             }, 
             {
               "type": "PowerShell",
