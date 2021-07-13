@@ -55,7 +55,7 @@
             },
             {
               "type": "PowerShell",
-              "name":   "InstallAzCopy",  
+              "name": "InstallAzCopy",  
               "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/InstallAzCopy.ps1",
               "runElevated": true
             }
@@ -72,7 +72,7 @@
               "replicationRegions": [
                 "westeurope"
               ]
-          }
+            }
           ]
         }
       }
