@@ -31,7 +31,7 @@
           }
         },
         "properties": {
-          "buildTimeoutInMinutes": 30,
+          "buildTimeoutInMinutes": 40,
           "vmProfile": {
             "vmSize": "Standard_D2_v2",
             "osDiskSizeGB": 127
@@ -54,11 +54,6 @@
               "updateLimit": 40
             },
             {
-              "type": "WindowsRestart",
-              "restartCheckCommand": "write-host 'restarting post Teams Install'",
-              "restartTimeout": "5m"
-            },
-            {
               "type": "PowerShell",
               "name":   "InstallAzCopy",  
               "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/InstallAzCopy.ps1",
@@ -76,7 +71,6 @@
               },
               "replicationRegions": [
                 "westeurope"
-
               ]
           }
           ]
