@@ -58,6 +58,32 @@
               "name": "InstallAzCopy",  
               "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/InstallAzCopy.ps1",
               "runElevated": true
+            },
+            {
+              "type": "PowerShell",
+              "runElevated": true,
+              "name": "CreateTempFolder",  
+              "inline": [
+                "New-Item -Path 'c:\\' -Name 'temp' -ItemType 'directory'"
+              ]
+            },
+            { 
+              "type": "Shell", 
+              "name": "CopyRessources", 
+              "inline": "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/VDAServerSetup_1912.exe c:\temp"
+            }, 
+            { 
+              "type": "Shell", 
+              "name": "InstallVDA", 
+              "inline": "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /virtualmachine /optimize /components vda,plugins"
+            }, 
+            {
+              "type": "PowerShell",
+              "runElevated": true,
+              "name": "UpdateDeprovisioningScript",
+              "inline": [
+                "((Get-Content -path C:\\DeprovisioningScript.ps1 -Raw) -replace 'Sysprep.exe /oobe /generalize /quiet /quit','Sysprep.exe /oobe /generalize /quit /mode:vm' ) | Set-Content -Path C:\\DeprovisioningScript.ps1"
+              ]
             }
           ],
           "distribute": [
