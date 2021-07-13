@@ -83,6 +83,7 @@
               "runElevated": true,
               "name": "InstallVDA", 
               "inline": [
+                "Restart-Service -Name Spooler",
                 "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /noresume /virtualmachine /optimize /masterimage /components vda,plugins /logpath c:\\Windows\\Temp"
               ]
             }, 
@@ -96,6 +97,7 @@
               "runElevated": true,
               "name": "InstallVDA-2", 
               "inline": [
+                "Restart-Service -Name Spooler",
                 "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /noresume /virtualmachine /optimize /masterimage /components vda,plugins /logpath c:\\Windows\\Temp"
               ]
             }, 
