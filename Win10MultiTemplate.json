@@ -74,6 +74,7 @@
               "inline": [
                 "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/VDAServerSetup_1912.exe c:\\temp",
                 "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/CitrixOptimizer.zip c:\\temp",
+                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/profilemgt_x64.msi c:\\temp",
                 "Expand-Archive C:\\temp\\CitrixOptimizer.zip -DestinationPath c:\\temp\\CitrixOptimizer"
               ]
             }, 
@@ -82,7 +83,7 @@
               "runElevated": true,
               "name": "InstallVDA", 
               "inline": [
-                "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /noresume /virtualmachine /optimize /masterimage /components vda,plugins"
+                "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /noresume /virtualmachine /optimize /masterimage /components vda,plugins /logpath c:\\Windows\\Temp"
               ]
             }, 
             {
@@ -95,7 +96,7 @@
               "runElevated": true,
               "name": "InstallVDA-2", 
               "inline": [
-                "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /noresume /virtualmachine /optimize /masterimage /components vda,plugins"
+                "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /noresume /virtualmachine /optimize /masterimage /components vda,plugins /logpath c:\\Windows\\Temp"
               ]
             }, 
             {
