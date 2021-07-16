@@ -85,7 +85,8 @@
               "inline": [
                 "Write-Host '================ InstallVDA : First run ========================'",
                 "(Get-Service spooler).WaitForStatus('Running','00:01:00')",
-                "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /noresume /virtualmachine /optimize /masterimage /components vda,plugins /logpath c:\\Windows\\Temp"
+                "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_1912.exe' -ArgumentList '/controllers \"store.ait.ch\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/masterimage', '/components vda,plugins', '/logpath c:\\Windows\\Temp' -Wait",
+                "Write-Host '================ InstallVDA : End First run ========================'"
               ]
             }, 
             {
@@ -100,7 +101,8 @@
               "inline": [
                 "Write-Host '================ InstallVDA : Second run ========================'",
                 "(Get-Service spooler).WaitForStatus('Running','00:01:00')",
-                "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /noresume /virtualmachine /optimize /masterimage /components vda,plugins /logpath c:\\Windows\\Temp"
+                "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_1912.exe' -ArgumentList '/controllers \"store.ait.ch\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/masterimage', '/components vda,plugins', '/logpath c:\\Windows\\Temp' -Wait",
+                "Write-Host '================ InstallVDA : End Second run ========================'"
               ]
             }, 
             {
