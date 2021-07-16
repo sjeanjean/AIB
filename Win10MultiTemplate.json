@@ -75,6 +75,7 @@
                 "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/VDAServerSetup_1912.exe c:\\temp",
                 "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/CitrixOptimizer.zip c:\\temp",
                 "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/profilemgt_x64.msi c:\\temp",
+                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/OneDriveSetup.exe c:\\temp",
                 "Expand-Archive C:\\temp\\CitrixOptimizer.zip -DestinationPath c:\\temp\\CitrixOptimizer"
               ]
             }, 
@@ -121,7 +122,7 @@
               "name": "Citrix Optimizer", 
               "inline": [
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Citrix Optimizer ========================'",
-                "C:\\temp\\CitrixOptimizer\\CtxOptimizerEngine.ps1 -Source C:\\temp\\CitrixOptimizer\\Templates\\Citrix_Windows_10_2009.xml -OutputXml C:\\Temp\\Rollback.xml",
+                "C:\\temp\\CitrixOptimizer\\CtxOptimizerEngine.ps1 -Mode Execute -Source C:\\temp\\CitrixOptimizer\\Templates\\Citrix_Windows_10_2009.xml -OutputXml C:\\Temp\\Rollback.xml",
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Citrix Optimizer done ========================'"
               ]
             }, 
