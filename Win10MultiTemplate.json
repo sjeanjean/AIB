@@ -83,7 +83,8 @@
               "runElevated": true,
               "name": "InstallVDA", 
               "inline": [
-                "Restart-Service -Name Spooler",
+                "Write-Host '================ InstallVDA : First run ========================'",
+                "(Get-Service spooler).WaitForStatus('Running','00:01:00')",
                 "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /noresume /virtualmachine /optimize /masterimage /components vda,plugins /logpath c:\\Windows\\Temp"
               ]
             }, 
@@ -97,7 +98,8 @@
               "runElevated": true,
               "name": "InstallVDA-2", 
               "inline": [
-                "Restart-Service -Name Spooler",
+                "Write-Host '================ InstallVDA : Second run ========================'",
+                "(Get-Service spooler).WaitForStatus('Running','00:01:00')",
                 "c:\\temp\\VDAServerSetup_1912.exe /controllers \"store.ait.ch\" /quiet /noreboot /noresume /virtualmachine /optimize /masterimage /components vda,plugins /logpath c:\\Windows\\Temp"
               ]
             }, 
