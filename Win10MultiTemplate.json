@@ -83,10 +83,10 @@
               "runElevated": true,
               "name": "InstallVDA", 
               "inline": [
-                "Write-Host '================ InstallVDA : First run ========================'",
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : First run ========================'",
                 "(Get-Service spooler).WaitForStatus('Running','00:01:00')",
                 "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_1912.exe' -ArgumentList '/controllers \"store.ait.ch\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/masterimage', '/components vda,plugins', '/logpath c:\\Windows\\Temp' -Wait",
-                "Write-Host '================ InstallVDA : End First run ========================'"
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : End First run ========================'"
               ]
             }, 
             {
@@ -99,10 +99,30 @@
               "runElevated": true,
               "name": "InstallVDA-2", 
               "inline": [
-                "Write-Host '================ InstallVDA : Second run ========================'",
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : Second run ========================'",
                 "(Get-Service spooler).WaitForStatus('Running','00:01:00')",
                 "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_1912.exe' -ArgumentList '/controllers \"store.ait.ch\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/masterimage', '/components vda,plugins', '/logpath c:\\Windows\\Temp' -Wait",
-                "Write-Host '================ InstallVDA : End Second run ========================'"
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : End Second run ========================'"
+              ]
+            }, 
+            { 
+              "type": "PowerShell", 
+              "runElevated": true,
+              "name": "InstallVDA OneDrive", 
+              "inline": [
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Install OneDrive ========================'",
+                "Start-Process -FilePath 'c:\\temp\\OneDriveSetup.exe' -ArgumentList '/silent', '/allusers' -Wait",
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ OneDrive Installation done ========================'"
+              ]
+            }, 
+            { 
+              "type": "PowerShell", 
+              "runElevated": true,
+              "name": "Citrix Optimizer", 
+              "inline": [
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Citrix Optimizer ========================'",
+                "C:\\temp\\CitrixOptimizer\\CtxOptimizerEngine.ps1 -Source C:\\temp\\CitrixOptimizer\\Templates\\Citrix_Windows_10_2009.xml -OutputXml C:\\Temp\\Rollback.xml",
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Citrix Optimizer done ========================'"
               ]
             }, 
             {
