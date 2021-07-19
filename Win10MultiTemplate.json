@@ -106,6 +106,12 @@
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : End Second run ========================'"
               ]
             }, 
+            {
+              "type": "PowerShell", 
+              "runElevated": true,
+              "name": "Install Applications", 
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Install-LanguagePacks.ps1"
+            }, 
             { 
               "type": "PowerShell", 
               "runElevated": true,
