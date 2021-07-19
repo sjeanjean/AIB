@@ -109,13 +109,15 @@
             { 
               "type": "PowerShell", 
               "runElevated": true,
-              "name": "InstallVDA OneDrive", 
-              "inline": [
-                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Install OneDrive ========================'",
-                "Start-Process -FilePath 'c:\\temp\\OneDriveSetup.exe' -ArgumentList '/silent', '/allusers' -Wait",
-                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ OneDrive Installation done ========================'"
-              ]
+              "name": "Install Applications", 
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/InstallApplications.ps1"
             }, 
+            {
+              "type": "PowerShell",
+              "name": "CustomizeImage",  
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/CustomizeImage.ps1",
+              "runElevated": true
+            },
             { 
               "type": "PowerShell", 
               "runElevated": true,

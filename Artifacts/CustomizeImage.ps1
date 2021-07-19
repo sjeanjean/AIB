@@ -1,5 +1,5 @@
 #region Set logging 
-$logFile = "c:\temp\" + (get-date -format 'yyyyMMdd') + '_softwareinstall.log'
+$logFile = $env:SystemRoot + +"\Temp\" + (get-date -format 'yyyyMMdd') + '_customizeinstall.log'
 function Write-Log {
     Param($message)
     Write-Output "$(get-date -format 'yyyyMMdd HH:mm:ss') $message" | Out-File -Encoding utf8 $logFile -Append
