@@ -109,7 +109,7 @@
             {
               "type": "PowerShell", 
               "runElevated": true,
-              "name": "Install Applications", 
+              "name": "Install LanguagesPacks", 
               "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Install-LanguagePacks.ps1"
             }, 
             { 
