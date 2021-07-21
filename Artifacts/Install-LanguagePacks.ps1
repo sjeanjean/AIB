@@ -26,19 +26,32 @@ Expand-Archive C:\temp\LanguagesPacks.zip -DestinationPath $LIPContent
 Add-AppProvisionedPackage -Online -PackagePath $LIPContent\fr-fr\LanguageExperiencePack.fr-fr.Neutral.appx -LicensePath $LIPContent\fr-fr\License.xml
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-Client-Language-Pack_x64_fr-fr.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Basic-fr-fr-Package~31bf3856ad364e35~amd64~~.cab
+Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Basic-fr-ch-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Handwriting-fr-fr-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-OCR-fr-fr-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Speech-fr-fr-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-TextToSpeech-fr-fr-Package~31bf3856ad364e35~amd64~~.cab
+Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-TextToSpeech-fr-ch-Package~31bf3856ad364e35~amd64~~.cab
 
 ##German##
 Add-AppProvisionedPackage -Online -PackagePath $LIPContent\de-de\LanguageExperiencePack.de-de.Neutral.appx -LicensePath $LIPContent\de-de\License.xml
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-Client-Language-Pack_x64_de-de.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Basic-de-de-Package~31bf3856ad364e35~amd64~~.cab
+Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Basic-de-ch-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Handwriting-de-de-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-OCR-de-de-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Speech-de-de-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-TextToSpeech-de-de-Package~31bf3856ad364e35~amd64~~.cab
+Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-TextToSpeech-de-ch-Package~31bf3856ad364e35~amd64~~.cab
+
+##Italian
+Add-AppProvisionedPackage -Online -PackagePath $LIPContent\it-it\LanguageExperiencePack.it-it.Neutral.appx -LicensePath $LIPContent\it-it\License.xml
+Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-Client-Language-Pack_x64_it-it.cab
+Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Basic-it-it-Package~31bf3856ad364e35~amd64~~.cab
+Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Handwriting-it-it-Package~31bf3856ad364e35~amd64~~.cab
+Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-OCR-it-it-Package~31bf3856ad364e35~amd64~~.cab
+Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Speech-it-it-Package~31bf3856ad364e35~amd64~~.cab
+Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-TextToSpeech-it-it-Package~31bf3856ad364e35~amd64~~.cab
 
 #region Block clean-up of unused language packs
 $RPath = "HKLM:\SOFTWARE\Policies\Microsoft\Control Panel\International"
@@ -61,6 +74,8 @@ catch {
 #endregion
 
 ##region Add ActiveSetup for configure UserLanguageList
+$Command = "$list=Get-WinUserLanguageList; $list.Add('de-ch'); $list.Add('de-de'); $list.Add('fr-ch'); $list.Add('it-ch'); $list.Add('it-it'); $list.Add('fr-fr'); Set-WinUserLanguageList -LanguageList $list -Force"
+$Command | Out-File -FilePath "$env:SystemRoot\SetWinUserLanguageList.ps1"
 try {
     New-Item -Path Registry::'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components' -Name 'OSD-ConfigurePreferredUserLangages'
     New-ItemProperty -Path Registry::'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages' `
@@ -69,7 +84,7 @@ try {
                      -PropertyType 'String'
     New-ItemProperty -Path Registry::'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages' `
                      -Name 'StubPath' `
-                     -Value 'Powershell.exe -ExecutionPolicy bypass -WindowStyle Hidden -NonInteractive -command "$list=Get-WinUserLanguageList; $list.Add(''de-ch''); $list.Add(''de-de''); $list.Add(''fr-ch''); $list.Add(''it-ch''); $list.Add(''it-it''); $list.Add(''fr-fr''); Set-WinUserLanguageList -LanguageList $list -Force"' `
+                     -Value 'Powershell.exe -ExecutionPolicy bypass -WindowStyle Hidden -NonInteractive -command "$env:SystemRoot\SetWinUserLanguageList.ps1"' `
                      -PropertyType 'String'
     if ((Get-ItemProperty $Registry::'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages').PSObject.Properties.Name -contains 'Version') {
         Write-log "Added Active Setup registry key"
