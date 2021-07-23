@@ -74,7 +74,7 @@ catch {
 #endregion
 
 ##region Add ActiveSetup for configure UserLanguageList
-$Command = "$list=Get-WinUserLanguageList; $list.Add('de-ch'); $list.Add('de-de'); $list.Add('fr-ch'); $list.Add('it-ch'); $list.Add('it-it'); $list.Add('fr-fr'); Set-WinUserLanguageList -LanguageList $list -Force"
+$Command = "`$l=Get-WinUserLanguageList;`$l.Add('de-ch');`$l.Add('de-de');`$l.Add('fr-ch');`$l.Add('it-ch');`$l.Add('it-it');`$l.Add('fr-fr');Set-WinUserLanguageList -LanguageList `$l -Force"
 $Command | Out-File -FilePath "$env:SystemRoot\SetWinUserLanguageList.ps1"
 try {
     New-Item -Path Registry::'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components' -Name 'OSD-ConfigurePreferredUserLangages'
@@ -84,7 +84,7 @@ try {
                      -PropertyType 'String'
     New-ItemProperty -Path Registry::'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages' `
                      -Name 'StubPath' `
-                     -Value 'Powershell.exe -ExecutionPolicy bypass -WindowStyle Hidden -NonInteractive -command "$env:SystemRoot\SetWinUserLanguageList.ps1"' `
+                     -Value 'Powershell.exe -WindowStyle Hidden -NonInteractive -ExecutionPolicy bypass -command "$env:SystemRoot\SetWinUserLanguageList.ps1"' `
                      -PropertyType 'String'
     if ((Get-ItemProperty $Registry::'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages').PSObject.Properties.Name -contains 'Version') {
         Write-log "Added Active Setup registry key"
