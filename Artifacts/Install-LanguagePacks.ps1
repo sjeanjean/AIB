@@ -84,7 +84,7 @@ try {
                      -PropertyType 'String'
     New-ItemProperty -Path Registry::'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages' `
                      -Name 'StubPath' `
-                     -Value 'Powershell.exe -WindowStyle Minimized -NonInteractive -ExecutionPolicy bypass -command ". $env:SystemRoot\SetWinUserLanguageList.ps1"' `
+                     -Value 'Powershell.exe -WindowStyle Hidden -NonInteractive -ExecutionPolicy bypass -command ". $env:SystemRoot\SetWinUserLanguageList.ps1"' `
                      -PropertyType 'String'
     if ((Get-ItemProperty $Registry::'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages').PSObject.Properties.Name -contains 'Version') {
         Write-log "Added Active Setup registry key"
