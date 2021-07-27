@@ -45,15 +45,6 @@
           },
           "customize": [
             {
-              "type": "WindowsUpdate",
-              "searchCriteria": "IsInstalled=0",
-              "filters": [
-                  "exclude:$_.Title -like '*Preview*'",
-                  "include:$true"
-                          ],
-              "updateLimit": 40
-            },
-            {
               "type": "PowerShell",
               "name": "InstallAzCopy",  
               "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/InstallAzCopy.ps1",
@@ -75,7 +66,6 @@
                 "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/VDAServerSetup_1912.exe c:\\temp",
                 "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/CitrixOptimizer.zip c:\\temp",
                 "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/profilemgt_x64.msi c:\\temp",
-                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/OneDriveSetup.exe c:\\temp",
                 "Expand-Archive C:\\temp\\CitrixOptimizer.zip -DestinationPath c:\\temp\\CitrixOptimizer"
               ]
             }, 
@@ -84,7 +74,7 @@
               "runElevated": true,
               "name": "InstallVDA", 
               "inline": [
-                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : First run ========================'",
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA ========================'",
                 "(Get-Service spooler).WaitForStatus('Running','00:01:00')",
                 "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_1912.exe' -ArgumentList '/controllers \"store.ait.ch\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/masterimage', '/components vda,plugins', '/logpath c:\\Windows\\Temp' -Wait",
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : End First run ========================'"
@@ -94,18 +84,7 @@
               "type": "WindowsRestart",
               "restartCheckCommand": "Write-Host 'restarting for VDA Installation'",
               "restartTimeout": "5m"
-             },
-            { 
-              "type": "PowerShell", 
-              "runElevated": true,
-              "name": "InstallVDA-2", 
-              "inline": [
-                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : Second run ========================'",
-                "(Get-Service spooler).WaitForStatus('Running','00:01:00')",
-                "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_1912.exe' -ArgumentList '/controllers \"store.ait.ch\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/masterimage', '/components vda,plugins', '/logpath c:\\Windows\\Temp' -Wait",
-                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : End Second run ========================'"
-              ]
-            }, 
+            },
             {
               "type": "PowerShell", 
               "runElevated": true,
@@ -116,7 +95,7 @@
               "type": "PowerShell", 
               "runElevated": true,
               "name": "Install Applications", 
-              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/InstallApplications.ps1"
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Install-Applications.ps1"
             }, 
             {
               "type": "PowerShell",
@@ -134,6 +113,23 @@
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Citrix Optimizer done ========================'"
               ]
             }, 
+            {
+              "type": "PowerShell",
+              "runElevated": true,
+              "name": "CleanUp",
+              "inline": [
+                "#Remove-Item c:\\temp -Force"
+              ]
+            },
+            {
+              "type": "WindowsUpdate",
+              "searchCriteria": "IsInstalled=0",
+              "filters": [
+                  "exclude:$_.Title -like '*Preview*'",
+                  "include:$true"
+                          ],
+              "updateLimit": 40
+            },
             {
               "type": "PowerShell",
               "runElevated": true,

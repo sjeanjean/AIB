@@ -7,6 +7,7 @@ function Write-Log {
 #endregion
 
 #region Install OneDrive
+"azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/OneDriveSetup.exe c:\\temp"
 try {
     Start-Process -FilePath 'c:\temp\OneDriveSetup.exe' -Wait -ErrorAction Stop -ArgumentList '/silent', '/allusers'
         if (Test-Path "C:\Program Files (x86)\Microsoft OneDrive\OneDrive.exe") {
