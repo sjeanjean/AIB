@@ -59,6 +59,7 @@ $Name = "BlockCleanupOfUnusedPreinstalledLangPacks"
 $value = "1"
 # Add Registry value
 try {
+    New-Item -Path $RPath -Force
     New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWORD -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
         Write-log "Added $Name registry key"
@@ -77,16 +78,16 @@ catch {
 $Command = "`$l=Get-WinUserLanguageList;`$l.Add('de-ch');`$l.Add('de-de');`$l.Add('fr-ch');`$l.Add('it-ch');`$l.Add('it-it');`$l.Add('fr-fr');Set-WinUserLanguageList -LanguageList `$l -Force"
 $Command | Out-File -FilePath "$env:SystemRoot\SetWinUserLanguageList.ps1"
 try {
-    New-Item -Path Registry::'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components' -Name 'OSD-ConfigurePreferredUserLangages'
-    New-ItemProperty -Path Registry::'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages' `
+    New-Item -Path Registry::'HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components' -Name 'OSD-ConfigurePreferredUserLangages'
+    New-ItemProperty -Path Registry::'HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages' `
                      -Name 'Version' `
                      -Value '1,0,0,0' `
                      -PropertyType 'String'
-    New-ItemProperty -Path Registry::'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages' `
+    New-ItemProperty -Path Registry::'HKLM::\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages' `
                      -Name 'StubPath' `
                      -Value 'Powershell.exe -WindowStyle Hidden -NonInteractive -ExecutionPolicy bypass -command ". $env:SystemRoot\SetWinUserLanguageList.ps1"' `
                      -PropertyType 'String'
-    if ((Get-ItemProperty $Registry::'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages').PSObject.Properties.Name -contains 'Version') {
+    if ((Get-ItemProperty Registry::'HKLM\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages').PSObject.Properties.Name -contains 'Version') {
         Write-log "Added Active Setup registry key"
     }
     else {
