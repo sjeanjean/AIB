@@ -32,6 +32,7 @@ Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFe
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Speech-fr-fr-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-TextToSpeech-fr-fr-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-TextToSpeech-fr-ch-Package~31bf3856ad364e35~amd64~~.cab
+Write-Log "Frenc LanguageFeatures OK"
 
 ##German##
 Add-AppProvisionedPackage -Online -PackagePath $LIPContent\de-de\LanguageExperiencePack.de-de.Neutral.appx -LicensePath $LIPContent\de-de\License.xml
@@ -43,6 +44,7 @@ Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFe
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Speech-de-de-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-TextToSpeech-de-de-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-TextToSpeech-de-ch-Package~31bf3856ad364e35~amd64~~.cab
+Write-Log "German LanguageFeatures OK"
 
 ##Italian
 Add-AppProvisionedPackage -Online -PackagePath $LIPContent\it-it\LanguageExperiencePack.it-it.Neutral.appx -LicensePath $LIPContent\it-it\License.xml
@@ -52,6 +54,7 @@ Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFe
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-OCR-it-it-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Speech-it-it-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-TextToSpeech-it-it-Package~31bf3856ad364e35~amd64~~.cab
+Write-Log "Italian LanguageFeatures OK"
 
 #region Block clean-up of unused language packs
 $RPath = "HKLM:\SOFTWARE\Policies\Microsoft\Control Panel\International"
@@ -78,16 +81,16 @@ catch {
 $Command = "`$l=Get-WinUserLanguageList;`$l.Add('de-ch');`$l.Add('de-de');`$l.Add('fr-ch');`$l.Add('it-ch');`$l.Add('it-it');`$l.Add('fr-fr');Set-WinUserLanguageList -LanguageList `$l -Force"
 $Command | Out-File -FilePath "$env:SystemRoot\SetWinUserLanguageList.ps1"
 try {
-    New-Item -Path Registry::'HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components' -Name 'OSD-ConfigurePreferredUserLangages'
-    New-ItemProperty -Path Registry::'HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages' `
+    New-Item -Path 'HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components' -Name 'OSD-ConfigurePreferredUserLangages'
+    New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages' `
                      -Name 'Version' `
                      -Value '1,0,0,0' `
                      -PropertyType 'String'
-    New-ItemProperty -Path Registry::'HKLM::\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages' `
+    New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages' `
                      -Name 'StubPath' `
                      -Value 'Powershell.exe -WindowStyle Hidden -NonInteractive -ExecutionPolicy bypass -command ". $env:SystemRoot\SetWinUserLanguageList.ps1"' `
                      -PropertyType 'String'
-    if ((Get-ItemProperty Registry::'HKLM\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages').PSObject.Properties.Name -contains 'Version') {
+    if ((Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\OSD-ConfigurePreferredUserLangages').PSObject.Properties.Name -contains 'Version') {
         Write-log "Added Active Setup registry key"
     }
     else {
@@ -97,4 +100,5 @@ try {
 catch {
     $ErrorMessage = $_.Exception.message
     write-log "Error adding Active Setup registry KEY: $ErrorMessage"
-}#endregion
+}
+#endregion
