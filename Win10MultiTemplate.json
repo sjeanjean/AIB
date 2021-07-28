@@ -109,7 +109,7 @@
               "name": "Citrix Optimizer", 
               "inline": [
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Citrix Optimizer ========================'",
-                "C:\\temp\\CitrixOptimizer\\CtxOptimizerEngine.ps1 -Mode Execute -Source C:\\temp\\CitrixOptimizer\\Templates\\Citrix_Windows_10_2009.xml -OutputXml C:\\Temp\\Rollback.xml",
+                "C:\\temp\\CitrixOptimizer\\CtxOptimizerEngine.ps1 -Mode Execute -Source C:\\temp\\CitrixOptimizer\\Templates\\Citrix_Windows_10_2009.xml -OutputXml $env:SystemRoot\\Temp\\Rollback.xml",
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Citrix Optimizer done ========================'"
               ]
             }, 
