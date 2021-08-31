@@ -32,7 +32,7 @@ Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFe
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-Speech-fr-fr-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-TextToSpeech-fr-fr-Package~31bf3856ad364e35~amd64~~.cab
 Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-LanguageFeatures-TextToSpeech-fr-ch-Package~31bf3856ad364e35~amd64~~.cab
-Write-Log "Frenc LanguageFeatures OK"
+Write-Log "French LanguageFeatures OK"
 
 ##German##
 Add-AppProvisionedPackage -Online -PackagePath $LIPContent\de-de\LanguageExperiencePack.de-de.Neutral.appx -LicensePath $LIPContent\de-de\License.xml
