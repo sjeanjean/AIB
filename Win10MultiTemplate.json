@@ -76,7 +76,7 @@
               "inline": [
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA ========================'",
                 "(Get-Service spooler).WaitForStatus('Running','00:01:00')",
-                "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_1912.exe' -ArgumentList '/controllers \"store.ait.ch\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/masterimage', '/components vda,plugins', '/logpath c:\\Windows\\Temp' -Wait",
+                "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_1912.exe' -ArgumentList '/controllers \"SZH1XCC502.ait.ch SZH1XCC503.ait.ch\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/mastermcsimage', '/install_mcsio_driver', '/no_mediafoundation_ack', '/enable_hdx_ports', '/enable_hdx_udp_ports', '/components vda', '/logpath c:\\Windows\\Temp' -Wait",
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : End First run ========================'"
               ]
             }, 
