@@ -149,7 +149,8 @@
                   "baseosimg": "windows10Multi"
               },
               "replicationRegions": [
-                "westeurope"
+                "westeurope",
+                "switzerlandnorth"
               ]
             }
           ]
