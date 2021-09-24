@@ -47,6 +47,8 @@ $identityNameResourceId = (Get-AzUserAssignedIdentity -ResourceGroupName $imageR
 $sigGalleryName= "MasterImages"
 # get the Image Definition Name
 $imageDefName ="VDA-image"
+# Set the Controllers address
+$CtrlNames = "SZH1XCC502.ait.ch,SZH1XCC503.ait.ch"
 
 # Update the Template 
 ((Get-Content -path $templateFilePath -Raw) -replace '<subscriptionID>',$subscriptionID) | Set-Content -Path $templateFilePath
@@ -57,6 +59,7 @@ $imageDefName ="VDA-image"
 ((Get-Content -path $templateFilePath -Raw) -replace '<imgBuilderId>',$identityNameResourceId) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<sharedImageGalName>',$sigGalleryName) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<imageDefName>',$imageDefName) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<ctrlName>',$CtrlNames) | Set-Content -Path $templateFilePath
 
 # The following commands require the Az.ImageBuilder module
 # Install the PowerShell module if not already installed
