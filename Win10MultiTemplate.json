@@ -72,7 +72,7 @@
             { 
               "type": "PowerShell", 
               "runElevated": true,
-              "name": "InstallVDA", 
+              "name": "InstallVDAAgent", 
               "inline": [
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA ========================'",
                 "(Get-Service spooler).WaitForStatus('Running','00:01:00')",
