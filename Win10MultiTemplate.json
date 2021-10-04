@@ -67,6 +67,7 @@
                 "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/CitrixOptimizer.zip c:\\temp",
                 "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/profilemgt_x64.msi c:\\temp",
                 "azcopy copy \"https://bycnitaibsources.blob.core.windows.net/sources/Citrix Workspace Environment Management Agent.exe\" c:\\temp",
+                "azcopy copy \"https://bycnitaibsources.blob.core.windows.net/sources/CDFControl.zip\" c:\\temp",
                 "Expand-Archive C:\\temp\\CitrixOptimizer.zip -DestinationPath c:\\temp\\CitrixOptimizer"
               ]
             }, 
