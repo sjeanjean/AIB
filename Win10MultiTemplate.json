@@ -40,7 +40,7 @@
             "type": "PlatformImage",
             "publisher": "MicrosoftWindowsDesktop",
             "offer": "Windows-10",
-            "sku": "21h1-evd",
+            "sku": "19h2-evd",
             "version": "latest"
           },
           "customize": [
@@ -63,11 +63,9 @@
               "runElevated": true,
               "name": "CopyResources", 
               "inline": [
-                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/VDAServerSetup_1912.exe c:\\temp",
+                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/VDAServerSetup_2109.exe c:\\temp",
                 "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/CitrixOptimizer.zip c:\\temp",
-                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/profilemgt_x64.msi c:\\temp",
-                "azcopy copy \"https://bycnitaibsources.blob.core.windows.net/sources/Citrix Workspace Environment Management Agent.exe\" c:\\temp",
-                "azcopy copy \"https://bycnitaibsources.blob.core.windows.net/sources/CDFControl.zip\" c:\\temp",
+                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/CDFControl.zip c:\\temp",
                 "Expand-Archive C:\\temp\\CitrixOptimizer.zip -DestinationPath c:\\temp\\CitrixOptimizer"
               ]
             }, 
@@ -78,21 +76,10 @@
               "inline": [
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA ========================'",
                 "(Get-Service spooler).WaitForStatus('Running','00:01:00')",
-                "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_1912.exe' -ArgumentList '/controllers \"<ctrlName>\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/mastermcsimage', '/install_mcsio_driver', '/no_mediafoundation_ack', '/enable_hdx_ports', '/enable_hdx_udp_ports', '/components vda', '/logpath c:\\Windows\\Temp' -Wait",
+                "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_2109.exe' -ArgumentList '/controllers \"<ctrlName>\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/mastermcsimage', /includeadditional \"Citrix MCS IODriver\", '/no_mediafoundation_ack', '/enable_hdx_ports', '/enable_hdx_udp_ports', '/components vda', '/wem_add_firewall_rules', '/wem_cloud_connectors \"<ctrlName>\"', '/logpath c:\\Windows\\Temp' -Wait",
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : End First run ========================'"
               ]
             }, 
-            { 
-              "type": "PowerShell", 
-              "runElevated": true,
-              "name": "Install WEM Agent", 
-              "inline": [
-                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Install WEM Agent ========================'",
-                "Start-Process -FilePath 'c:\\temp\\Citrix Workspace Environment Management Agent.exe' -ArgumentList '/quiet', 'Cloud=1', 'CloudConnectorList=<ctrlName>' -Wait",
-                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ WEM Agent Installed ========================'"
-              ]
-            }, 
-
             {
               "type": "WindowsRestart",
               "restartCheckCommand": "Write-Host 'restarting for VDA Installation'",

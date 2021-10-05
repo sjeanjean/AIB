@@ -17,7 +17,7 @@ Disable-ScheduledTask -TaskPath "\Microsoft\Windows\AppxDeploymentClient\" -Task
 [string]$LIPContent = "C:\temp\LanguagesPacks"
 
 ##Copy language Repository
-azcopy copy https://bycnitaibsources.blob.core.windows.net/languagepacks/21h1/LanguagesPacks.zip c:\temp
+azcopy copy https://bycnitaibsources.blob.core.windows.net/languagepacks/19h2/LanguagesPacks.zip c:\temp
 Expand-Archive C:\temp\LanguagesPacks.zip -DestinationPath $LIPContent
 
 
