@@ -75,8 +75,8 @@
               "name": "InstallVDAAgent", 
               "inline": [
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA ========================'",
-                "(Get-Service spooler).WaitForStatus('Running','00:01:00')",
-                "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_2109.exe' -ArgumentList '/controllers \"<ctrlName>\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/mastermcsimage', /includeadditional \"Citrix MCS IODriver\", '/no_mediafoundation_ack', '/enable_hdx_ports', '/enable_hdx_udp_ports', '/components vda', '/wem_add_firewall_rules', '/wem_cloud_connectors \"<ctrlName>\"', '/logpath c:\\Windows\\Temp' -Wait",
+                "$args = @('/controllers \"<ctrlName>\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/mastermcsimage', '/includeadditional \"Citrix MCS IODriver\"', '/no_mediafoundation_ack', '/enable_hdx_ports', '/enable_hdx_udp_ports', '/components vda', '/wem_add_firewall_rules', '/wem_cloud_connectors \"<ctrlName>\"', '/logpath c:\\Windows\\Temp')",
+                "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_2109.exe' -ArgumentList $args -Wait",
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : End First run ========================'"
               ]
             }, 
