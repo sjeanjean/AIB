@@ -94,8 +94,8 @@
             { 
               "type": "PowerShell", 
               "runElevated": true,
-              "name": "Install Applications", 
-              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Install-Applications.ps1"
+              "name": "Install OneDrive", 
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Install-OneDrive.ps1"
             }, 
             {
               "type": "PowerShell",
@@ -137,6 +137,15 @@
               "inline": [
                 "((Get-Content -path C:\\DeprovisioningScript.ps1 -Raw) -replace 'Sysprep.exe /oobe /generalize /quiet /quit','Sysprep.exe /oobe /generalize /quit /mode:vm' ) | Set-Content -Path C:\\DeprovisioningScript.ps1",
                 "Remove-Item -Path C:\\DeprovisioningScript.ps1 -Force"
+              ]
+            },
+            {
+              "type": "PowerShell",
+              "runElevated": true,
+              "name": "Seal image",
+              "inline": [
+                "Rename-LocalUser -Name 'packer' -NewName 'Administrator'",
+                "Disable-LocalUser -Name 'Administrator'"
               ]
             }
           ],

@@ -22,3 +22,23 @@ catch {
     write-log "Error installing OneDrive: $ErrorMessage"
 }
 #endregion
+
+#region Prevent users from redirecting their Windows known folders to their PC
+$RPath = "HKLM:\SOFTWARE\Policies\Microsoft\OneDrive"
+$Name = "KFMBlockOptOut"
+$value = "1"
+# Add Registry value
+try {
+    New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWORD -Force
+    if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
+        Write-log "Added $Name registry key"
+    }
+    else {
+        write-log "Error locating the $Name registry key"
+    }
+}
+catch {
+    $ErrorMessage = $_.Exception.message
+    write-log "Error adding $Name registry KEY: $ErrorMessage"
+}
+#endregion
