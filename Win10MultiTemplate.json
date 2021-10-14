@@ -147,6 +147,17 @@
                 "Rename-LocalUser -Name 'packer' -NewName 'Administrator'",
                 "Disable-LocalUser -Name 'Administrator'"
               ]
+            },
+            {
+              "type": "PowerShell",
+              "runElevated": true,
+              "name": "Securing ACL",
+              "inline": [
+                "$acl = Get-Acl c:\\",
+                "$rules = $acl.Access | Where { $_.IdentityReference -eq 'NT AUTHORITY\\Authenticated Users' }",
+                "foreach($rule in $rules) { $acl.RemoveAccessRule($rule) }",
+                "$acl | Set-Acl c:\\"
+              ]
             }
           ],
           "distribute": [
