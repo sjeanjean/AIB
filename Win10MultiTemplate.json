@@ -75,7 +75,7 @@
               "name": "InstallVDAAgent", 
               "inline": [
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA ========================'",
-                "$args = @('/controllers \"<ctrlName>\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/mastermcsimage', '/includeadditional \"Citrix MCS IODriver\"', '/no_mediafoundation_ack', '/enable_hdx_ports', '/enable_hdx_udp_ports', '/components vda', '/wem_add_firewall_rules', '/wem_cloud_connectors \"<ctrlName>\"', '/logpath c:\\Windows\\Temp')",
+                "$args = @('/controllers \"<ctrlName>\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/mastermcsimage', '/includeadditional \"Citrix MCS IODriver\",\"Citrix WEM Agent\"', '/no_mediafoundation_ack', '/enable_hdx_ports', '/enable_hdx_udp_ports', '/components vda', '/wem_add_firewall_rules', '/wem_cloud_connectors \"<ctrlName>\"', '/logpath c:\\Windows\\Temp')",
                 "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_2109.exe' -ArgumentList $args -Wait",
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : End First run ========================'"
               ]
@@ -137,15 +137,6 @@
               "inline": [
                 "((Get-Content -path C:\\DeprovisioningScript.ps1 -Raw) -replace 'Sysprep.exe /oobe /generalize /quiet /quit','Sysprep.exe /oobe /generalize /quit /mode:vm' ) | Set-Content -Path C:\\DeprovisioningScript.ps1",
                 "Remove-Item -Path C:\\DeprovisioningScript.ps1 -Force"
-              ]
-            },
-            {
-              "type": "PowerShell",
-              "runElevated": true,
-              "name": "Seal image",
-              "inline": [
-                "Rename-LocalUser -Name 'packer' -NewName 'Administrator'",
-                "Disable-LocalUser -Name 'Administrator'"
               ]
             },
             {
