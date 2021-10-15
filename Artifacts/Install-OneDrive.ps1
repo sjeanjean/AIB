@@ -42,3 +42,7 @@ catch {
     write-log "Error adding $Name registry KEY: $ErrorMessage"
 }
 #endregion
+
+#region Disable ScheduledTask "OneDrive Per-Machine Standalone Update Task"
+Disable-ScheduledTask -TaskName "OneDrive Per-Machine Standalone Update Task"
+#endregion
