@@ -1,5 +1,5 @@
 #region Set logging 
-$logFile = $env:SystemRoot + "\Temp\" + (get-date -format 'yyyyMMdd') + '_softwareinstall.log'
+$logFile = $env:SystemRoot + "\Temp\" + (get-date -format 'yyyyMMdd') + '_OneDriveInstall.log'
 function Write-Log {
     Param($message)
     Write-Output "$(get-date -format 'yyyyMMdd HH:mm:ss') $message" | Out-File -Encoding utf8 $logFile -Append
@@ -29,6 +29,10 @@ $Name = "KFMBlockOptOut"
 $value = "1"
 # Add Registry value
 try {
+    # Create the key if it does not exist
+    If (-NOT (Test-Path $RPath)) {
+        New-Item -Path $RPath -Force | Write-Log
+    }
     New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWORD -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
         Write-log "Added $Name registry key"
