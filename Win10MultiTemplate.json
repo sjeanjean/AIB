@@ -146,8 +146,8 @@
               "inline": [
                 "((Get-Content -path C:\\DeprovisioningScript.ps1 -Raw) -replace 'Sysprep.exe /oobe /generalize /quiet /quit','Sysprep.exe /oobe /generalize /quit /mode:vm' ) | Set-Content -Path C:\\DeprovisioningScript.ps1",
                 "Remove-Item -Path C:\\DeprovisioningScript.ps1 -Force",
-                "\"Rename-LocalUser -Name 'packer' -NewName 'VDI_adm'\" | Out-File -FilePath C:\\DeprovisioningScript.ps1",
-                "\"Disable-LocalUser -Name 'VDI_adm'\" | Append-File -FilePath C:\\DeprovisioningScript.ps1"
+                "\"Rename-LocalUser -Name 'packer' -NewName 'adm_VDI'\" | Out-File -FilePath C:\\DeprovisioningScript.ps1",
+                "\"Disable-LocalUser -Name 'adm_VDI'\" | Append-File -FilePath C:\\DeprovisioningScript.ps1"
               ]
             },
             {

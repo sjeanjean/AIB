@@ -33,7 +33,31 @@ try {
     If (-NOT (Test-Path $RPath)) {
         New-Item -Path $RPath -Force | Write-Log
     }
-    New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWORD -Force
+    New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWord -Force
+    if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
+        Write-log "Added $Name registry key"
+    }
+    else {
+        write-log "Error locating the $Name registry key"
+    }
+}
+catch {
+    $ErrorMessage = $_.Exception.message
+    write-log "Error adding $Name registry KEY: $ErrorMessage"
+}
+#endregion
+
+#region Silently move Windows known folders to OneDrive
+$RPath = "HKLM:\SOFTWARE\Policies\Microsoft\OneDrive"
+$Name = "KFMSilentOptIn"
+$value = "4a3d9983-e936-4837-9552-9d9126a92eb0"
+# Add Registry value
+try {
+    # Create the key if it does not exist
+    If (-NOT (Test-Path $RPath)) {
+        New-Item -Path $RPath -Force | Write-Log
+    }
+    New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType String -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
         Write-log "Added $Name registry key"
     }
