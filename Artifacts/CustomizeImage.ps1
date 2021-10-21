@@ -25,3 +25,7 @@ catch {
     write-log "Error adding $Name registry KEY: $ErrorMessage"
 }
 #endregion
+
+#region Disable Windows Search
+Set-Service -Name WSearch -StartupType Disabled
+#endregion
