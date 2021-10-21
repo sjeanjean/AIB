@@ -7,7 +7,7 @@ function Write-Log {
 #endregion
 
 $RPath = "HKLM:\SOFTWARE\FSLogix\Profiles"
-$Name = "Enabled "
+$Name = "Enabled"
 $value = "1"
 # Add Registry value
 try {
@@ -48,7 +48,7 @@ catch {
     write-log "Error adding $Name registry KEY: $ErrorMessage"
 }
 
-$Name = "VolumeType "
+$Name = "VolumeType"
 $value = "VHDX"
 try {
     # Create the key if it does not exist
@@ -90,7 +90,7 @@ catch {
 }
 
 $RPath = "HKLM:\SOFTWARE\Policies\FSLogix\ODFC"
-$Name = "Enabled "
+$Name = "Enabled"
 $value = "1"
 # Add Registry value
 try {
@@ -131,7 +131,7 @@ catch {
     write-log "Error adding $Name registry KEY: $ErrorMessage"
 }
 
-$Name = "VolumeType "
+$Name = "VolumeType"
 $value = "VHDX"
 try {
     # Create the key if it does not exist
