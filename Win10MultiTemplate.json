@@ -76,8 +76,7 @@
                 "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/CitrixOptimizer.zip c:\\temp",
                 "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/CDFControl.zip c:\\temp",
                 "Expand-Archive C:\\temp\\CitrixOptimizer.zip -DestinationPath c:\\temp\\CitrixOptimizer",
-                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/FSLogixRules.zip c:\\temp",
-                "Expand-Archive C:\\temp\\FSLogixRules.zip -DestinationPath 'C:\\Program Files\\FSLogix\\Apps\\Rules'"
+                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/FSLogixRules.zip c:\\temp"
               ]
             }, 
             { 

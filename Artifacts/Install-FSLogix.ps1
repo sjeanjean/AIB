@@ -6,6 +6,7 @@ function Write-Log {
 }
 #endregion
 
+#region configure
 $RPath = "HKLM:\SOFTWARE\FSLogix\Profiles"
 $Name = "Enabled"
 $value = "1"
@@ -190,3 +191,8 @@ catch {
     $ErrorMessage = $_.Exception.message
     write-log "Error adding $Name registry KEY: $ErrorMessage"
 }
+#endregion
+
+#region copy rules
+"Expand-Archive C:\\temp\\FSLogixRules.zip -DestinationPath 'C:\\Program Files\\FSLogix\\Apps\\Rules'"
+#endregion
