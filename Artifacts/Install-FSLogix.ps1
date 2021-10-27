@@ -194,5 +194,5 @@ catch {
 #endregion
 
 #region copy rules
-"Expand-Archive C:\\temp\\FSLogixRules.zip -DestinationPath 'C:\\Program Files\\FSLogix\\Apps\\Rules'"
+Expand-Archive C:\temp\FSLogixRules.zip -DestinationPath 'C:\Program Files\FSLogix\Apps\Rules' | Write-Log
 #endregion
