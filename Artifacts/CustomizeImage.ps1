@@ -49,3 +49,41 @@ catch {
     write-log "Error adding $Name registry KEY: $ErrorMessage"
 }
 #endregion
+
+#region Remove Lock Menu
+$RPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+$Name = "DisableLockWorkstation"
+$value = "1"
+try {
+    New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWORD -Force
+    if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
+        Write-log "Added $Name registry key"
+    }
+    else {
+        write-log "Error locating the $Name registry key"
+    }
+}
+catch {
+    $ErrorMessage = $_.Exception.message
+    write-log "Error adding $Name registry KEY: $ErrorMessage"
+}
+#endregion
+
+#region Remove Disconnect  menu
+$RPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+$Name = "NoDisconnect"
+$value = "1"
+try {
+    New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWORD -Force
+    if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
+        Write-log "Added $Name registry key"
+    }
+    else {
+        write-log "Error locating the $Name registry key"
+    }
+}
+catch {
+    $ErrorMessage = $_.Exception.message
+    write-log "Error adding $Name registry KEY: $ErrorMessage"
+}
+#endregion
