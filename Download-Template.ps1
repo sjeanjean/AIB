@@ -67,7 +67,7 @@ Install-Module -name 'Az.ImageBuilder' -AllowPrerelease
 
 # Run the deployment
 New-AzResourceGroupDeployment -ResourceGroupName $imageResourceGroup -TemplateFile $templateFilePath `
--api-version "2020-02-14" -imageTemplateName $imageTemplateName -svclocation $location
+-imageTemplateName $imageTemplateName -svclocation $location
 
 # Verify the template
 Get-AzImageBuilderTemplate -ImageTemplateName $imageTemplateName -ResourceGroupName $imageResourceGroup |

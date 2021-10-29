@@ -17,7 +17,7 @@
       {
         "name": "[parameters('imageTemplateName')]",
         "type": "Microsoft.VirtualMachineImages/imageTemplates",
-        "apiVersion": "[parameters('api-version')]",
+        "apiVersion": "2020-02-14",
         "location": "[parameters('svclocation')]",
         "dependsOn": [],
         "tags": {
