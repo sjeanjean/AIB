@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
       "imageTemplateName": {
@@ -157,6 +157,12 @@
                 "\"Rename-LocalUser -Name 'packer' -NewName 'adm_VDI'\" | Out-File -FilePath C:\\DeprovisioningScript.ps1",
                 "\"Disable-LocalUser -Name 'adm_VDI'\" | Append-File -FilePath C:\\DeprovisioningScript.ps1"
               ]
+            },
+            {
+              "type": "PowerShell",
+              "name": "CustomizeImage",  
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Configure-Security.ps1",
+              "runElevated": true
             },
             {
               "type": "PowerShell",
