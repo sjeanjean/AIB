@@ -5,9 +5,6 @@
       "imageTemplateName": {
         "type": "string"
       },
-      "api-version": {
-        "type": "string"
-      },
       "svclocation": {
         "type": "string"
       }
