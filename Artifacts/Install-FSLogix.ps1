@@ -10,12 +10,19 @@ function Write-Log {
 $RPath = "HKLM:\SOFTWARE\FSLogix\Profiles"
 $Name = "Enabled"
 $value = "1"
-# Add Registry value
+# Create the key if it does not exist
 try {
-    # Create the key if it does not exist
     If (-NOT (Test-Path $RPath)) {
         New-Item -Path $RPath -Force | Write-Log
     }
+}
+catch {
+    $ErrorMessage = $_.Exception.message
+    write-log "Error creating key $RPath : $ErrorMessage"
+}
+
+# Add Registry value
+try {
     New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWord -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
         Write-log "Added $Name registry key"
@@ -32,10 +39,6 @@ catch {
 $Name = "VHDLocations"
 $value = "\\SZH1XDAT01.ait.ch\Profile$"
 try {
-    # Create the key if it does not exist
-    If (-NOT (Test-Path $RPath)) {
-        New-Item -Path $RPath -Force | Write-Log
-    }
     New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType String -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
         Write-log "Added $Name registry key"
@@ -52,10 +55,6 @@ catch {
 $Name = "VolumeType"
 $value = "VHDX"
 try {
-    # Create the key if it does not exist
-    If (-NOT (Test-Path $RPath)) {
-        New-Item -Path $RPath -Force | Write-Log
-    }
     New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType String -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
         Write-log "Added $Name registry key"
@@ -71,12 +70,7 @@ catch {
 
 $Name = "IsDynamic"
 $value = "1"
-# Add Registry value
 try {
-    # Create the key if it does not exist
-    If (-NOT (Test-Path $RPath)) {
-        New-Item -Path $RPath -Force | Write-Log
-    }
     New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWord -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
         Write-log "Added $Name registry key"
@@ -93,12 +87,19 @@ catch {
 $RPath = "HKLM:\SOFTWARE\Policies\FSLogix\ODFC"
 $Name = "Enabled"
 $value = "1"
-# Add Registry value
+# Create the key if it does not exist
 try {
-    # Create the key if it does not exist
     If (-NOT (Test-Path $RPath)) {
         New-Item -Path $RPath -Force | Write-Log
     }
+}
+catch {
+    $ErrorMessage = $_.Exception.message
+    write-log "Error creating key $RPath : $ErrorMessage"
+}
+
+# Add Registry value
+try {
     New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWord -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
         Write-log "Added $Name registry key"
@@ -115,10 +116,6 @@ catch {
 $Name = "VHDLocations"
 $value = "\\SZH1XDAT01.ait.ch\Profile$"
 try {
-    # Create the key if it does not exist
-    If (-NOT (Test-Path $RPath)) {
-        New-Item -Path $RPath -Force | Write-Log
-    }
     New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType String -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
         Write-log "Added $Name registry key"
@@ -135,10 +132,6 @@ catch {
 $Name = "VolumeType"
 $value = "VHDX"
 try {
-    # Create the key if it does not exist
-    If (-NOT (Test-Path $RPath)) {
-        New-Item -Path $RPath -Force | Write-Log
-    }
     New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType String -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
         Write-log "Added $Name registry key"
@@ -155,10 +148,6 @@ catch {
 $Name = "IncludeOneDrive"
 $value = "1"
 try {
-    # Create the key if it does not exist
-    If (-NOT (Test-Path $RPath)) {
-        New-Item -Path $RPath -Force | Write-Log
-    }
     New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWord -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
         Write-log "Added $Name registry key"
@@ -175,10 +164,6 @@ catch {
 $Name = "IsDynamic"
 $value = "1"
 try {
-    # Create the key if it does not exist
-    If (-NOT (Test-Path $RPath)) {
-        New-Item -Path $RPath -Force | Write-Log
-    }
     New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWord -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
         Write-log "Added $Name registry key"
