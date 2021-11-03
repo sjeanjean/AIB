@@ -6,7 +6,14 @@ function Write-Log {
 }
 #endregion
 
+"Public/Invoke-CommandAs.ps1", "Private/Invoke-ScheduledTask.ps1" | % {
+    . ([ScriptBlock]::Create((New-Object Net.WebClient).DownloadString("https://raw.githubusercontent.com/mkellerman/Invoke-CommandAs/master/Invoke-CommandAs/${_}")))
+}
+
+
 #region Enable Tamper Protection
+# Execute As System.
+Invoke-CommandAs -ScriptBlock {  
 $RPath = "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features"
 $Name = "TamperProtection "
 $value = 5
@@ -28,9 +35,11 @@ catch {
     $ErrorMessage = $_.Exception.message
     write-log "Error adding $Name registry KEY: $ErrorMessage"
 }
+} -AsSystem
 #endregion
 
-#region Enable Memory Integrity
+#region Enable Memory Integrity (No compatible with SIG images)
+<#
 $RPath = "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity"
 $Name = "Enabled"
 $value = 1
@@ -51,6 +60,7 @@ catch {
     $ErrorMessage = $_.Exception.message
     write-log "Error adding $Name registry KEY: $ErrorMessage"
 }
+#>
 #endregion
 
 #region Enable Windows Defender SmartScreen on Block
