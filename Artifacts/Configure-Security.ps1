@@ -6,16 +6,20 @@ function Write-Log {
 }
 #endregion
 
-"Public/Invoke-CommandAs.ps1", "Private/Invoke-ScheduledTask.ps1" | % {
+Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Configure Security ========================'
+
+
+"Public/Invoke-CommandAs.ps1", "Private/Invoke-ScheduledTask.ps1" | ForEach-Object {
     . ([ScriptBlock]::Create((New-Object Net.WebClient).DownloadString("https://raw.githubusercontent.com/mkellerman/Invoke-CommandAs/master/Invoke-CommandAs/${_}")))
 }
 
 
 #region Enable Tamper Protection
 # Execute As System.
-Invoke-CommandAs -ScriptBlock {  
+Invoke-CommandAs -ScriptBlock { New-ItemProperty -ErrorAction Stop -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features" -Name "TamperProtection" -Value 5 -PropertyType DWORD -Force } -AsSystem
+
 $RPath = "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features"
-$Name = "TamperProtection "
+$Name = "TamperProtection"
 $value = 5
 # Add Registry value
 try {
@@ -35,7 +39,6 @@ catch {
     $ErrorMessage = $_.Exception.message
     write-log "Error adding $Name registry KEY: $ErrorMessage"
 }
-} -AsSystem
 #endregion
 
 #region Enable Memory Integrity (No compatible with SIG images)
@@ -100,3 +103,5 @@ catch {
     write-log "Error adding $Name registry KEY: $ErrorMessage"
 }
 #endregion
+
+Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Configure Security Done ====================='
