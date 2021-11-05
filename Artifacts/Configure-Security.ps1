@@ -12,11 +12,13 @@ Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Configure 
 "Public/Invoke-CommandAs.ps1", "Private/Invoke-ScheduledTask.ps1" | ForEach-Object {
     . ([ScriptBlock]::Create((New-Object Net.WebClient).DownloadString("https://raw.githubusercontent.com/mkellerman/Invoke-CommandAs/master/Invoke-CommandAs/${_}")))
 }
-
+Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Install command done ========================'
 
 #region Enable Tamper Protection
 # Execute As System.
 Invoke-CommandAs -ScriptBlock { New-ItemProperty -ErrorAction Stop -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features" -Name "TamperProtection" -Value 5 -PropertyType DWORD -Force } -AsSystem
+
+Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Invoke-CommandAs command done ========================'
 
 $RPath = "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features"
 $Name = "TamperProtection"
