@@ -85,7 +85,8 @@
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA ========================'",
                 "$args = @('/controllers \"<ctrlName>\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/mastermcsimage', '/includeadditional \"Citrix MCS IODriver\",\"Citrix WEM Agent\"', '/no_mediafoundation_ack', '/enable_hdx_ports', '/enable_hdx_udp_ports', '/components vda', '/wem_add_firewall_rules', '/wem_cloud_connectors \"<ctrlName>\"', '/logpath c:\\Windows\\Temp')",
                 "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_2109.exe' -ArgumentList $args -Wait",
-                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : End First run ========================'"
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : End First run ========================'",
+                "Write-Host 'TamperProtection=' (Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows Defender\\Features' -Name 'TamperProtection').TamperProtection"
               ]
             }, 
             {
@@ -124,7 +125,8 @@
               "inline": [
                 "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Citrix Optimizer ========================'",
                 "C:\\temp\\CitrixOptimizer\\CtxOptimizerEngine.ps1 -Mode Execute -Source C:\\temp\\Citrix_Windows_10_1909_INTEC.xml -OutputXml $env:SystemRoot\\Temp\\Rollback.xml",
-                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Citrix Optimizer done ========================'"
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Citrix Optimizer done ========================'",
+                "Write-Host 'TamperProtection=' (Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows Defender\\Features' -Name 'TamperProtection').TamperProtection"
               ]
             }, 
             {
@@ -158,7 +160,9 @@
                 "$acl = Get-Acl c:\\",
                 "$rules = $acl.Access | Where { $_.IdentityReference -eq 'NT AUTHORITY\\Authenticated Users' }",
                 "foreach($rule in $rules) { $acl.RemoveAccessRule($rule) }",
-                "$acl | Set-Acl c:\\"
+                "$acl | Set-Acl c:\\",
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Securing ACL done ========================'",
+                "Write-Host 'TamperProtection=' (Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows Defender\\Features' -Name 'TamperProtection').TamperProtection"
               ]
             },
             {
@@ -169,7 +173,9 @@
                 "((Get-Content -path C:\\DeprovisioningScript.ps1 -Raw) -replace 'Sysprep.exe /oobe /generalize /quiet /quit','Sysprep.exe /oobe /generalize /quit /mode:vm' ) | Set-Content -Path C:\\DeprovisioningScript.ps1",
                 "Remove-Item -Path C:\\DeprovisioningScript.ps1 -Force",
                 "\"Rename-LocalUser -Name 'packer' -NewName 'adm_VDI'\" | Out-File -FilePath C:\\DeprovisioningScript.ps1",
-                "\"Disable-LocalUser -Name 'adm_VDI'\" | Add-Content -Path C:\\DeprovisioningScript.ps1"
+                "\"Disable-LocalUser -Name 'adm_VDI'\" | Add-Content -Path C:\\DeprovisioningScript.ps1",
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Disable Local Administrator done ========================'",
+                "Write-Host 'TamperProtection=' (Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows Defender\\Features' -Name 'TamperProtection').TamperProtection"
               ]
             }
           ],
