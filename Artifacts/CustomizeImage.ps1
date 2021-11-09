@@ -34,7 +34,16 @@ Set-Service -Name WSearch -StartupType Disabled
 $RPath = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore"
 $Name = "RemoveWindowsStore"
 $value = "1"
-# Add Registry value
+# Create the key if it does not exist
+try {
+    If (-NOT (Test-Path $RPath)) {
+        New-Item -Path $RPath -Force | Write-Log
+    }
+}
+catch {
+    $ErrorMessage = $_.Exception.message
+    write-log "Error creating key $RPath : $ErrorMessage"
+}
 try {
     New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWORD -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
