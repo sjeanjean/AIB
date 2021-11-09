@@ -133,5 +133,12 @@ catch {
 #endregion
 
 #region Disable ScheduledTask "OneDrive Per-Machine Standalone Update Task"
-Disable-ScheduledTask -TaskName "OneDrive Per-Machine Standalone Update Task"
+try {
+    Disable-ScheduledTask -TaskName "OneDrive Per-Machine Standalone Update Task"
+    Write-Log "Scheduled Task is: " (Get-ScheduledTask -TaskName "OneDrive Per-Machine Standalone Update Task").State
+}
+catch {
+    $ErrorMessage = $_.Exception.message
+    write-log "Error Disable ScheduledTask \"OneDrive Per-Machine Standalone Update Task\": $ErrorMessage"
+}
 #endregion
