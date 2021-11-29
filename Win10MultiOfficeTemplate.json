@@ -1,0 +1,201 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "imageTemplateName": {
+        "type": "string"
+      },
+      "svclocation": {
+        "type": "string"
+      }
+    },
+    "variables": {},
+    "resources": [
+      {
+        "name": "[parameters('imageTemplateName')]",
+        "type": "Microsoft.VirtualMachineImages/imageTemplates",
+        "apiVersion": "2020-02-14",
+        "location": "[parameters('svclocation')]",
+        "dependsOn": [],
+        "tags": {
+          "imagebuilderTemplate": "win10multioffice",
+          "userIdentity": "enabled"
+        },
+        "identity": {
+          "type": "UserAssigned",
+          "userAssignedIdentities": {
+            "<imgBuilderId>": {}
+          }
+        },
+        "properties": {
+          "buildTimeoutInMinutes": 180,
+          "vmProfile": {
+            "vmSize": "Standard_D3_v2",
+            "osDiskSizeGB": 127
+          },
+          "source": {
+            "type": "PlatformImage",
+            "publisher": "MicrosoftWindowsDesktop",
+            "offer": "Windows-10",
+            "sku": "19h2-evd",
+            "version": "latest"
+          },
+          "customize": [
+            {
+              "type": "WindowsUpdate",
+              "searchCriteria": "BrowseOnly=0 and IsInstalled=0",
+              "filters": [
+                  "exclude:$_.Title -like '*Preview*'",
+                  "include:$true"
+                          ],
+              "updateLimit": 40
+            },
+            {
+              "type": "PowerShell",
+              "name": "InstallAzCopy",  
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/InstallAzCopy.ps1",
+              "runElevated": true
+            },
+            {
+              "type": "PowerShell",
+              "runElevated": true,
+              "name": "CreateTempFolder",  
+              "inline": [
+                "New-Item -Path 'c:\\' -Name 'temp' -ItemType 'directory'"
+              ]
+            },
+            { 
+              "type": "PowerShell", 
+              "runElevated": true,
+              "name": "CopyResources", 
+              "inline": [
+                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/VDAServerSetup_2109.exe c:\\temp",
+                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/CitrixOptimizer.zip c:\\temp",
+                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/CDFControl.zip c:\\temp",
+                "Expand-Archive C:\\temp\\CitrixOptimizer.zip -DestinationPath c:\\temp\\CitrixOptimizer",
+                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/Citrix_Windows_10_1909_INTEC.xml c:\\temp",
+                "azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/FSLogixRules.zip c:\\temp"
+              ]
+            }, 
+            { 
+              "type": "PowerShell", 
+              "runElevated": true,
+              "name": "InstallVDAAgent", 
+              "inline": [
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA ========================'",
+                "$args = @('/controllers \"<ctrlName>\"', '/quiet', '/noreboot', '/noresume', '/virtualmachine', '/optimize', '/mastermcsimage', '/includeadditional \"Citrix MCS IODriver\",\"Citrix WEM Agent\"', '/no_mediafoundation_ack', '/enable_hdx_ports', '/enable_hdx_udp_ports', '/components vda', '/wem_add_firewall_rules', '/wem_cloud_connectors \"<ctrlName>\"', '/logpath c:\\Windows\\Temp')",
+                "Start-Process -FilePath 'c:\\temp\\VDAServerSetup_2109.exe' -ArgumentList $args -Wait",
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ InstallVDA : End First run ========================'",
+                "Write-Host 'TamperProtection=' (Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows Defender\\Features' -Name 'TamperProtection').TamperProtection"
+              ]
+            }, 
+            {
+              "type": "WindowsRestart",
+              "restartCheckCommand": "Write-Host 'restarting for VDA Installation'",
+              "restartTimeout": "5m"
+            },
+            {
+              "type": "PowerShell", 
+              "runElevated": true,
+              "name": "Install LanguagesPacks", 
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Install-LanguagePacks.ps1"
+            }, 
+            { 
+              "type": "PowerShell", 
+              "runElevated": true,
+              "name": "Install Office", 
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Install-Office.ps1"
+            }, 
+            { 
+              "type": "PowerShell", 
+              "runElevated": true,
+              "name": "Install FSLogix", 
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Install-FSLogix.ps1"
+            }, 
+            {
+              "type": "PowerShell",
+              "name": "CustomizeImage",  
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/CustomizeImage.ps1",
+              "runElevated": true
+            },
+            { 
+              "type": "PowerShell", 
+              "runElevated": true,
+              "name": "Citrix Optimizer", 
+              "inline": [
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Citrix Optimizer ========================'",
+                "C:\\temp\\CitrixOptimizer\\CtxOptimizerEngine.ps1 -Mode Execute -Source C:\\temp\\Citrix_Windows_10_1909_INTEC.xml -OutputXml $env:SystemRoot\\Temp\\Rollback.xml",
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Citrix Optimizer done ========================'",
+                "Write-Host 'TamperProtection=' (Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows Defender\\Features' -Name 'TamperProtection').TamperProtection"
+              ]
+            }, 
+            {
+              "type": "PowerShell",
+              "runElevated": true,
+              "name": "CleanUp",
+              "inline": [
+                "#Remove-Item c:\\temp -Force"
+              ]
+            },
+            {
+              "type": "WindowsUpdate",
+              "searchCriteria": "IsInstalled=0",
+              "filters": [
+                  "exclude:$_.Title -like '*Preview*'",
+                  "include:$true"
+                          ],
+              "updateLimit": 40
+            },
+            {
+              "type": "PowerShell",
+              "name": "CustomizeImage",  
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Configure-Security.ps1",
+              "runElevated": true
+            },
+            {
+              "type": "PowerShell",
+              "runElevated": true,
+              "name": "Securing ACL",
+              "inline": [
+                "$acl = Get-Acl c:\\",
+                "$rules = $acl.Access | Where { $_.IdentityReference -eq 'NT AUTHORITY\\Authenticated Users' }",
+                "foreach($rule in $rules) { $acl.RemoveAccessRule($rule) }",
+                "$acl | Set-Acl c:\\",
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Securing ACL done ========================'",
+                "Write-Host 'TamperProtection=' (Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows Defender\\Features' -Name 'TamperProtection').TamperProtection"
+              ]
+            },
+            {
+              "type": "PowerShell",
+              "runElevated": true,
+              "name": "UpdateDeprovisioningScript",
+              "inline": [
+                "((Get-Content -path C:\\DeprovisioningScript.ps1 -Raw) -replace 'Sysprep.exe /oobe /generalize /quiet /quit','Sysprep.exe /oobe /generalize /quit /mode:vm' ) | Set-Content -Path C:\\DeprovisioningScript.ps1",
+                "Remove-Item -Path C:\\DeprovisioningScript.ps1 -Force",
+                "\"Rename-LocalUser -Name 'packer' -NewName 'adm_VDI'\" | Out-File -FilePath C:\\DeprovisioningScript.ps1",
+                "\"Disable-LocalUser -Name 'adm_VDI'\" | Add-Content -Path C:\\DeprovisioningScript.ps1",
+                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Disable Local Administrator done ========================'",
+                "Write-Host 'TamperProtection=' (Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows Defender\\Features' -Name 'TamperProtection').TamperProtection"
+              ]
+            }
+          ],
+          "distribute": [
+            {   
+              "type": "SharedImage",
+              "galleryImageId": "/subscriptions/<subscriptionID>/resourceGroups/<rgName>/providers/Microsoft.Compute/galleries/<sharedImageGalName>/images/<imageDefName>",
+              "runOutputName": "win10Client",
+              "artifactTags": {
+                  "source": "wvd10",
+                  "baseosimg": "windows10MultiOffice"
+              },
+              "replicationRegions": [
+                "westeurope",
+                "switzerlandnorth"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+  
