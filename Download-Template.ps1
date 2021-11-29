@@ -7,8 +7,12 @@
 # it creates a Windows image and outputs the finished image to a Managed IMage
 # Set the template file path and the template file name
 #$Win10Url = "https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/solutions/14_Building_Images_WVD/armTemplateWVD.json"
-$Win10Url = "https://raw.githubusercontent.com/sjeanjean/AIB/main/Win10MultiTemplate.json"
-$Win10FileName = "Win10MultiTemplate.json"
+
+# image template name
+$imageTemplateName = 'Win10MultiOfficeTemplate'
+$Win10FileName = $imageTemplateName + '.json'
+$Win10Url = "https://raw.githubusercontent.com/sjeanjean/AIB/main/" + $Win10FileName
+
 #Test to see if the path exists.  Create it if not
 if ((test-path .\Template) -eq $false) {
     new-item -ItemType Directory -name 'Template'
@@ -33,8 +37,7 @@ $location = (Get-AzResourceGroup -Name $imageResourceGroup).Location
 $subscriptionID = (Get-AzContext).Subscription.Id
 # name of the image to be created
 $imageName = 'aibCustomImgWin10'
-# image template name
-$imageTemplateName = 'imageTemplateWin10Multi'
+
 # distribution properties object name (runOutput), i.e. this gives you the properties of the managed image on completion
 $runOutputName = 'win10Client'
 # Set the Template File Path
@@ -46,7 +49,7 @@ $identityNameResourceId = (Get-AzUserAssignedIdentity -ResourceGroupName $imageR
 # get the Shared Image Galery Name
 $sigGalleryName= "MasterImages"
 # get the Image Definition Name
-$imageDefName ="VDA-image"
+$imageDefName ="VDA-imageOffice"
 # Set the Controllers address
 $CtrlNames = "SZH1XCC502.ait.ch,SZH1XCC503.ait.ch"
 

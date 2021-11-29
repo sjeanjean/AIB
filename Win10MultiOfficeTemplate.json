@@ -183,7 +183,7 @@
             {   
               "type": "SharedImage",
               "galleryImageId": "/subscriptions/<subscriptionID>/resourceGroups/<rgName>/providers/Microsoft.Compute/galleries/<sharedImageGalName>/images/<imageDefName>",
-              "runOutputName": "win10Client",
+              "runOutputName": "<runOutputName>",
               "artifactTags": {
                   "source": "wvd10",
                   "baseosimg": "windows10MultiOffice"
