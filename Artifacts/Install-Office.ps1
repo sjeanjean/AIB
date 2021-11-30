@@ -7,10 +7,10 @@ function Write-Log {
 #endregion
 
 #region Install OneDrive
-azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/Office.xml c:\temp
-azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/officedeploymenttool_14527-20178.exe c:\temp
+azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/Office/Office.xml c:\temp
+azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/Office/setup.exe c:\temp
 try {
-    Start-Process -FilePath 'c:\temp\officedeploymenttool_14527-20178.exe' -Wait -ErrorAction Stop -ArgumentList '/configure', 'c:\temp\Office.xml'
+    Start-Process -FilePath 'c:\temp\setup.exe' -Wait -ErrorAction Stop -ArgumentList '/configure', 'c:\temp\Office.xml'
         if (Test-Path "C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE") {
         Write-Log "Office has been installed"
     }
