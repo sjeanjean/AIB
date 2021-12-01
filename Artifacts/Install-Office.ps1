@@ -6,6 +6,7 @@ function Write-Log {
 }
 #endregion
 
+Write-Host "--------------- Start Install-Office -------------"
 #region Install OneDrive
 azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/Office/Office.xml c:\temp
 azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/Office/setup.exe c:\temp
@@ -23,3 +24,4 @@ catch {
     write-log "Error installing Office: $ErrorMessage"
 }
 #endregion
+Write-Host "--------------- End Install-Office -------------"
