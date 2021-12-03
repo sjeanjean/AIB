@@ -9,7 +9,7 @@
 #$Win10Url = "https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/solutions/14_Building_Images_WVD/armTemplateWVD.json"
 
 # image template name
-$imageTemplateName = 'Win10MultiOffice'
+$imageTemplateName = 'Win10Multi'
 $Win10FileName = $imageTemplateName + 'Template.json'
 $Win10Url = "https://raw.githubusercontent.com/sjeanjean/AIB/main/" + $Win10FileName
 # get the Image Definition Name
@@ -67,6 +67,18 @@ $CtrlNames = "SZH1XCC502.ait.ch,SZH1XCC503.ait.ch"
 # The following commands require the Az.ImageBuilder module
 # Install the PowerShell module if not already installed
 Install-Module -name 'Az.ImageBuilder' -AllowPrerelease
+
+# Create the image definition
+New-AzGalleryImageDefinition `
+   -GalleryName $sigGalleryName `
+   -ResourceGroupName $imageResourceGroup `
+   -Location $location `
+   -Name $imageDefName `
+   -OsState generalized `
+   -OsType Windows `
+   -Publisher 'BYCN-IT' `
+   -Offer 'VDA-Windows10Office' `
+   -Sku '19h2-evd'
 
 # Run the deployment
 New-AzResourceGroupDeployment -ResourceGroupName $imageResourceGroup -TemplateFile $templateFilePath `
