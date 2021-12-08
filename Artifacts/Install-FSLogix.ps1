@@ -100,6 +100,22 @@ catch {
     write-log "Error adding $Name registry KEY: $ErrorMessage"
 }
 
+$Name = "ProfileType"
+$value = 3
+try {
+    New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWord -Force
+    if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
+        Write-log "Added $Name registry key"
+    }
+    else {
+        write-log "Error locating the $Name registry key"
+    }
+}
+catch {
+    $ErrorMessage = $_.Exception.message
+    write-log "Error adding $Name registry KEY: $ErrorMessage"
+}
+
 
 
 $RPath = "HKLM:\SOFTWARE\Policies\FSLogix\ODFC"
@@ -181,6 +197,22 @@ catch {
 
 $Name = "IsDynamic"
 $value = "1"
+try {
+    New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWord -Force
+    if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
+        Write-log "Added $Name registry key"
+    }
+    else {
+        write-log "Error locating the $Name registry key"
+    }
+}
+catch {
+    $ErrorMessage = $_.Exception.message
+    write-log "Error adding $Name registry KEY: $ErrorMessage"
+}
+
+$Name = "VHDAccessMode"
+$value = 1
 try {
     New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWord -Force
     if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
