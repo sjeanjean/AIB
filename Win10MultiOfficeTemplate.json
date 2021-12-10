@@ -109,6 +109,12 @@
             { 
               "type": "PowerShell", 
               "runElevated": true,
+              "name": "Install OneDrive", 
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Install-OneDrive.ps1"
+            }, 
+            { 
+              "type": "PowerShell", 
+              "runElevated": true,
               "name": "Install FSLogix", 
               "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Install-FSLogix.ps1"
             }, 
