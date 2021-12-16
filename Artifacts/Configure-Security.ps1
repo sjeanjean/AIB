@@ -8,17 +8,33 @@ function Write-Log {
 
 Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Configure Security ========================'
 
+#region Configure ACL
+$acl = Get-Acl c:\
+$rules = $acl.Access | Where { $_.IdentityReference.value -eq 'NT AUTHORITY\Authenticated Users' }
+foreach($rule in $rules) { $acl.RemoveAccessRule($rule) }
+$acl | Set-Acl c:\
 
-"Public/Invoke-CommandAs.ps1", "Private/Invoke-ScheduledTask.ps1" | ForEach-Object {
-    . ([ScriptBlock]::Create((New-Object Net.WebClient).DownloadString("https://raw.githubusercontent.com/mkellerman/Invoke-CommandAs/master/Invoke-CommandAs/${_}")))
-}
-Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Install command done ========================'
+$acl = Get-Acl C:\Windows\System32\Spool\drivers\color
+$rules = $acl.Access | Where { $_.IdentityReference.value -eq 'BUILTIN\Users' }
+foreach($rule in $rules) { $acl.RemoveAccessRule($rule) }
+$acl | Set-Acl C:\Windows\System32\Spool\drivers\color
 
-#region Enable Tamper Protection
-# Execute As System.
-Invoke-CommandAs -ScriptBlock { New-ItemProperty -ErrorAction Stop -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features" -Name "TamperProtection" -Value 5 -PropertyType DWORD -Force } -AsSystem
+$acl = Get-Acl C:\Windows\Tracing
+$rules = $acl.Access | Where { $_.IdentityReference.value -eq 'BUILTIN\Users' }
+foreach($rule in $rules) { $acl.RemoveAccessRule($rule) }
+$acl | Set-Acl C:\Windows\Tracing
 
-Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Invoke-CommandAs command done ========================'
+$acl = Get-Acl C:\Windows\Tasks
+$rules = $acl.Access | Where { $_.IdentityReference.value -eq 'NT AUTHORITY\Authenticated Users' }
+foreach($rule in $rules) { $acl.RemoveAccessRule($rule) }
+$acl | Set-Acl C:\Windows\Tasks
+
+Write-Log (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Securing ACL done ========================'
+#endregion
+
+#region Turn On DEP
+Start-Process -NoNewWindow -FilePath "bcdedit.exe" -ArgumentList "/set {current} nx AlwaysOn" -RedirectStandardOutput $logFile
+#endregion
 
 $RPath = "HKLM:\SOFTWARE\Microsoft\Windows Defender\Features"
 $Name = "TamperProtection"

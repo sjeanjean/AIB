@@ -161,19 +161,6 @@
             {
               "type": "PowerShell",
               "runElevated": true,
-              "name": "Securing ACL",
-              "inline": [
-                "$acl = Get-Acl c:\\",
-                "$rules = $acl.Access | Where { $_.IdentityReference -eq 'NT AUTHORITY\\Authenticated Users' }",
-                "foreach($rule in $rules) { $acl.RemoveAccessRule($rule) }",
-                "$acl | Set-Acl c:\\",
-                "Write-Host (get-date -format 'yyyy/MM/dd HH:mm:ss') '================ Securing ACL done ========================'",
-                "Write-Host 'TamperProtection=' (Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows Defender\\Features' -Name 'TamperProtection').TamperProtection"
-              ]
-            },
-            {
-              "type": "PowerShell",
-              "runElevated": true,
               "name": "UpdateDeprovisioningScript",
               "inline": [
                 "((Get-Content -path C:\\DeprovisioningScript.ps1 -Raw) -replace 'Sysprep.exe /oobe /generalize /quiet /quit','Sysprep.exe /oobe /generalize /quit /mode:vm' ) | Set-Content -Path C:\\DeprovisioningScript.ps1",
