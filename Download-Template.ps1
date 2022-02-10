@@ -9,12 +9,13 @@
 #$Win10Url = "https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/solutions/14_Building_Images_WVD/armTemplateWVD.json"
 
 # image template name
-$imageTemplateName = 'Win10Multi'
+$imageTemplateName = 'Win10MultiOffice'
+$imageSKU = '21h2-avd'
 $Win10FileName = $imageTemplateName + 'Template.json'
 $Win10Url = "https://raw.githubusercontent.com/sjeanjean/AIB/main/" + $Win10FileName
 # get the Image Definition Name
 #$imageDefName ="VDA-imageOffice"
-$imageDefName = $imageTemplateName
+$imageDefName = $imageTemplateName + '-' + $imageSKU
 
 #Test to see if the path exists.  Create it if not
 if ((test-path .\Template) -eq $false) {
@@ -69,18 +70,26 @@ $CtrlNames = "SZH1XCC502.ait.ch,SZH1XCC503.ait.ch"
 Install-Module -name 'Az.ImageBuilder' -AllowPrerelease
 
 # Create the image definition
-New-AzGalleryImageDefinition `
-   -GalleryName $sigGalleryName `
-   -ResourceGroupName $imageResourceGroup `
-   -Location $location `
-   -Name $imageDefName `
-   -OsState generalized `
-   -OsType Windows `
-   -Publisher 'BYCN-IT' `
-   -Offer 'VDA-Windows10Office' `
-   -Sku '19h2-evd'
+Try {
+    Get-AzGalleryImageDefinition `
+        -GalleryName $sigGalleryName `
+        -ResourceGroupName $imageResourceGroup `
+        -Name $imageDefName
+}
+Catch {
+    New-AzGalleryImageDefinition `
+    -GalleryName $sigGalleryName `
+    -ResourceGroupName $imageResourceGroup `
+    -Location $location `
+    -Name $imageDefName `
+    -OsState generalized `
+    -OsType Windows `
+    -Publisher 'BYCN-IT' `
+    -Offer "VDA-$imageTemplateName" `
+    -Sku $imageSKU
+}
 
-# Run the deployment
+# Create the deployment
 New-AzResourceGroupDeployment -ResourceGroupName $imageResourceGroup -TemplateFile $templateFilePath `
 -imageTemplateName $imageTemplateName -svclocation $location
 
