@@ -10,7 +10,7 @@
 
 # image template name
 $imageTemplateName = 'Win10MultiOffice'
-$imageSKU = '21h2-avd'
+$imageSKU = 'win10-21h2-avd'
 #$imageSKU = '19h2-evd'
 $Win10FileName = $imageTemplateName + 'Template.json'
 $Win10Url = "https://raw.githubusercontent.com/sjeanjean/AIB/main/" + $Win10FileName
@@ -124,7 +124,7 @@ Get-AzVMImageOffer -Location $location -PublisherName $pubName | Format-Table Of
 # $offerName = 'office-365'
 $offerName = 'Windows-10'
 Get-AzVMImageSku -Location $location -PublisherName $pubName -Offer $offerName | Format-Table Skus,Offer,PublisherName,Location
-$skuName = '20h1-evd'
+$skuName = 'win10-21h2-avd'
 Get-AzVMImage -Location $location -PublisherName $pubName -Skus $skuName -Offer $offerName
 $version = '19041.572.2010091946'
 Get-AzVMImage -Location $location -PublisherName $pubName -Offer $offerName -Skus $skuName -Version $version
