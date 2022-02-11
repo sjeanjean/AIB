@@ -11,10 +11,10 @@
 # image template name
 $imageTemplateName = 'Win10MultiOffice'
 $imageSKU = '21h2-avd'
+#$imageSKU = '19h2-evd'
 $Win10FileName = $imageTemplateName + 'Template.json'
 $Win10Url = "https://raw.githubusercontent.com/sjeanjean/AIB/main/" + $Win10FileName
 # get the Image Definition Name
-#$imageDefName ="VDA-imageOffice"
 $imageDefName = $imageTemplateName + '-' + $imageSKU
 
 #Test to see if the path exists.  Create it if not
@@ -42,7 +42,7 @@ $subscriptionID = (Get-AzContext).Subscription.Id
 # name of the image to be created
 $imageName = 'aibCustomImgWin10'
 # distribution properties object name (runOutput), i.e. this gives you the properties of the managed image on completion
-$runOutputName = 'win10Client'
+$runOutputName = 'win10Client-' + $imageSKU
 # Set the Template File Path
 $templateFilePath = ".\Template\$Win10FileName"
 # user-assigned managed identity
@@ -60,6 +60,7 @@ $CtrlNames = "SZH1XCC502.ait.ch,SZH1XCC503.ait.ch"
 ((Get-Content -path $templateFilePath -Raw) -replace '<region1>',$location) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<runOutputName>',$runOutputName) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<imageName>',$imageName) | Set-Content -Path $templateFilePath
+((Get-Content -path $templateFilePath -Raw) -replace '<imageSKU>',$imageSKU) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<imgBuilderId>',$identityNameResourceId) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<sharedImageGalName>',$sigGalleryName) | Set-Content -Path $templateFilePath
 ((Get-Content -path $templateFilePath -Raw) -replace '<imageDefName>',$imageDefName) | Set-Content -Path $templateFilePath
