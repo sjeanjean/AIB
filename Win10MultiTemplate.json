@@ -112,6 +112,12 @@
               "name": "Install FSLogix", 
               "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Install-FSLogix.ps1"
             }, 
+            { 
+              "type": "PowerShell", 
+              "runElevated": true,
+              "name": "Install Chrome", 
+              "scriptUri": "https://raw.githubusercontent.com/sjeanjean/AIB/main/Artifacts/Install-Chrome.ps1"
+            }, 
             {
               "type": "PowerShell",
               "name": "CustomizeImage",  
