@@ -31,3 +31,19 @@ catch {
     write-log "Error installing Chrome: $ErrorMessage"
 }
 #endregion
+
+azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/googlechromestandaloneenterprise64.msi c:\temp
+
+$preference_file = 'C:\Program Files (x86)\Google\Chrome\Application\master_preferences'
+$pref = Get-Content $preference_file | ConvertFrom-Json
+
+#region Disable automatic updates
+#endregion
+
+#region Disable Active Setup
+#endregion
+
+#region Remove the Chrome desktop icon
+#endregion
+
+#$pref | ConvertTo-Json | set-content $preference_file
