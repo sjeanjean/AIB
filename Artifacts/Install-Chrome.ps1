@@ -19,7 +19,7 @@ try {
         $logFile
     )  
     Start-Process -FilePath "$env:systemroot\system32\msiexec.exe" -Wait -ErrorAction Stop -ArgumentList $MSIArguments
-        if (Test-Path "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe") {
+        if (Test-Path "C:\Program Files\Google\Chrome\Application\chrome.exe") {
         Write-Log "Chrome has been installed"
     }
     else {
@@ -34,10 +34,16 @@ catch {
 
 azcopy copy https://bycnitaibsources.blob.core.windows.net/sources/googlechromestandaloneenterprise64.msi c:\temp
 
-$preference_file = 'C:\Program Files (x86)\Google\Chrome\Application\master_preferences'
+$preference_file = 'C:\Program Files\Google\Chrome\Application\master_preferences'
 $pref = Get-Content $preference_file | ConvertFrom-Json
 
 #region Disable automatic updates
+Stop-Service gpupdate
+Stop-Service gpupdatem
+Set-Service -Name gupdate -StartupType Disabled 
+Set-Service -Name gupdatem -StartupType Disabled 
+Unregister-ScheduledTask -TaskName GoogleUpdateTaskMachineCore* -Confirm:$false
+Unregister-ScheduledTask -TaskName GoogleUpdateTaskMachineUA* -Confirm:$false
 #endregion
 
 #region Disable Active Setup
@@ -46,4 +52,13 @@ $pref = Get-Content $preference_file | ConvertFrom-Json
 #region Remove the Chrome desktop icon
 #endregion
 
-#$pref | ConvertTo-Json | set-content $preference_file
+$pref | add-member -name 'homepage' -value "https://insideplus.bouygues-es-intec.com/" -MemberType NoteProperty
+$pref | add-member -name 'homepage_is_newtabpage' -value "false" -MemberType NoteProperty
+$session = [PSCustomObject]@{
+    startup_urls = @(
+        'https://insideplus.bouygues-es-intec.com/'
+    )
+}
+$pref | add-member -name 'session' -value $session -MemberType NoteProperty
+
+$pref | ConvertTo-Json | set-content $preference_file
