@@ -132,3 +132,7 @@ catch {
     write-log "Error adding $Name registry KEY: $ErrorMessage"
 }
 #endregion
+
+#region Customize Menu layout
+azcopy copy 'https://bycnitaibsources.blob.core.windows.net/sources/LayoutModification.xml' 'c:\Users\Default\AppData\Local\Microsoft\Windows\Shell'
+#endregion
