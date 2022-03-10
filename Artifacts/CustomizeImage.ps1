@@ -115,6 +115,22 @@ catch {
     write-log "Error adding $Name registry KEY: $ErrorMessage"
 }
 
+$Name = "AUOptions"
+$value = 2
+try {
+    New-ItemProperty -ErrorAction Stop -Path $RPath -Name $name -Value $value -PropertyType DWORD -Force
+    if ((Get-ItemProperty $RPath).PSObject.Properties.Name -contains $name) {
+        Write-log "Added $Name registry key"
+    }
+    else {
+        write-log "Error locating the $Name registry key"
+    }
+}
+catch {
+    $ErrorMessage = $_.Exception.message
+    write-log "Error adding $Name registry KEY: $ErrorMessage"
+}
+
 $RPath = "HKLM:\SOFTWARE\Policies\Microsoft\windows\windowsupdate"
 $Name = "SetDisableUXWUAccess"
 $value = 1
